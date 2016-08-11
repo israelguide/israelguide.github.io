@@ -10,7 +10,7 @@ function formatDateFromString( date ) {
 
 function cutText(text, maxLength) {
 	var cuted = text;
-	if (cuted.length > maxLength) {
+	if (cuted != undefined && cuted.length > maxLength) {
 		cuted = cuted.substr(0, maxLength - 1) + "…";
 	}
 	return cuted;
@@ -101,7 +101,6 @@ db.ref('/').on('value', function(data) {
 /**
  * View functionality
  */
-
 $('#viewModal').on('show.bs.modal', function (event) {
 	var button = $(event.relatedTarget)
   	var key = button.data('key')
@@ -112,12 +111,14 @@ $('#viewModal').on('show.bs.modal', function (event) {
 	db.ref('/' + key + '/answers/').once("value").then(function(obj) {
 		$('.modal-title', modal).empty().html('<div class="list-group"></div>');
 		data = obj.val();
-		for( var key in data ) {
-			v = data[key];
+		for( var k in data ) {
+			v = data[k];
 			vote = v['vote'] || 0;
 			$('.modal-title .list-group', modal).append('<div class="list-group-item">'
 			    + '<div class="row-action-primary text-center">'
-			      + '<i class="material-icons" ' + ((vote > 0) ? 'style="background-color:rgb(177, 239, 152) !important"' : '') + '>thumb_up</i>'
+			      + '<a href="javascript:void(0);" class="upvote-answer" data-vote="' + v['vote'] + '" data-key="' + k + '">'
+			      + '<h3><span class="label label-primary">' + v['vote'] + '</span></h3>'
+			      + '<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></a>'
 			    + '</div>'
 			    + '<div class="row-content">'
 			      + '<div class="least-content">' + formatDateFromString( v['mDate'] ) + '</div>'
@@ -127,6 +128,22 @@ $('#viewModal').on('show.bs.modal', function (event) {
 			  + '</div>'
 			  + '<div class="list-group-separator"></div>');
 		}
+
+		/**
+		 * Upvote functionality
+		 */
+		$('a.upvote-answer').on('click', function() {
+			answerKey = $(this).attr('data-key');
+			answerVote = +$(this).attr('data-vote') + 1;
+
+			db.ref('/' + key + '/answers/' + answerKey + '/').update({ 
+				vote: answerVote
+			});
+
+			$(this).attr('data-vote', answerVote);
+			$('.label', this).text(answerVote);
+
+		});
 	});
 });
 
@@ -135,11 +152,9 @@ $('#viewModal').on('hidden.bs.modal', function (event) {
 	modal.find('.modal-title').empty();
 });
 
-
 /**
  * Reply functionality
  */
-
 $('#replyModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget)
   var key = button.data('key')
