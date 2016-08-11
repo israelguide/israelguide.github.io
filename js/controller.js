@@ -108,7 +108,7 @@ $('#viewModal').on('show.bs.modal', function (event) {
 
 	$('.modal-title', modal).empty().html('<h3>Retrieving answers</h3>');
 
-	db.ref('/' + key + '/answers/').once("value").then(function(obj) {
+	db.ref('/' + key + '/answers/').orderByChild('vote').on("value", function(obj) {
 		$('.modal-title', modal).empty().html('<div class="list-group"></div>');
 		data = obj.val();
 		for( var k in data ) {
@@ -133,16 +133,23 @@ $('#viewModal').on('show.bs.modal', function (event) {
 		 * Upvote functionality
 		 */
 		$('a.upvote-answer').on('click', function() {
+
 			answerKey = $(this).attr('data-key');
 			answerVote = +$(this).attr('data-vote') + 1;
 
+			if( Cookies.get(key + '&&' + answerKey) ) {
+				$(this).attr('disabled', true);
+				return false;
+			} else {
+				Cookies.set(key + '&&' + answerKey, true, { expires: 7 });
+			}
+			
 			db.ref('/' + key + '/answers/' + answerKey + '/').update({ 
 				vote: answerVote
 			});
 
 			$(this).attr('data-vote', answerVote);
 			$('.label', this).text(answerVote);
-
 		});
 	});
 });
