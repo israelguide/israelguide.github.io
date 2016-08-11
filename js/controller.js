@@ -76,14 +76,20 @@ function processPage( page ) {
 
 }
 
-
-// var buddy_name = Cookies.get('buddy_name');
-var buddy_name = null;
+/**
+ * Login / Logout
+ */
+var buddy_name = Cookies.get('buddy_name');
 if( buddy_name == undefined || buddy_name == null ) {
 	buddy_name = prompt('Enter your name', '');
 	Cookies.set('buddy_name', buddy_name, { expires: 7 });
 }
 $("#buddyName").text($("#buddyName").text().replace(/__buddy_name__/g, buddy_name));
+
+$('#auth-logout').on('click', function() {
+	Cookies.remove('buddy_name');
+	location.reload();
+});
 
 var page = checkPage();
 processPage( page );
