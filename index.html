@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <title>iGuide</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- Mobile support -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Material Design fonts -->
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Bootstrap -->
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Material Design -->
+  <link href="dist/css/bootstrap-material-design.css" rel="stylesheet">
+  <link href="dist/css/ripples.min.css" rel="stylesheet">
+
+  <link href="//cdn.rawgit.com/FezVrasta/dropdown.js/master/jquery.dropdown.css" rel="stylesheet">
+
+  <link href="index.css" rel="stylesheet">
+
+  <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+
+</head>
+<body>
+
+<div class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="javascript:void(0)"><img src="iGuide/logoMain.png" id="appLogo"></a>
+    </div>
+    <div class="navbar-collapse collapse navbar-inverse-collapse" id="action-menu">
+      
+      <ul class="nav navbar-nav navbar-left">
+        <li class="active"><a href="javascript:void(0)">New Questions</a></li>
+        <li><a href="javascript:void(0)">Archived</a></li>
+      </ul>
+
+      <form class="navbar-form navbar-left">
+        <div class="form-group">
+          <input class="form-control col-md-12" placeholder="Search" type="text">
+        </div>
+      </form>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="javascript:void(0)" id="auth-logout">Logout</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+
+        <li id="unanswered_questions">
+          <a href="javascript:void(0)" data-container="body" data-toggle="popover" data-placement="bottom" data-content="You have __unansw__ unanswered questions">
+            <span class="label label-danger">__unansw__</span>
+          </a>
+        </li>
+
+        <li data-container="body" data-toggle="popover" data-placement="bottom" data-content="Your current rate is 4.75 / 5"><a href="javascript:void(0)">Hello, Sergey</a></li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div id="results">
+    <p>Data loading ...</p>
+  </div>
+</div>
+
+<div class="modal" id="viewModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="replyModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Reply the question below:</h4>
+      </div>
+
+      <form class="form-horizontal" method="post">
+
+        <div class="modal-body">
+            <fieldset>
+              <input type="hidden" name="buddy" value="Sergey">
+              <input type="hidden" name="key">
+              <legend class="question-field"></legend>
+              <div class="form-group">
+                <div class="col-md-12">
+                  <textarea class="form-control" rows="3" id="textArea" name="answer" required="" autofocus></textarea>
+                  <span class="help-block">Please try to provide exact and detailed answer</span>
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="alert alert-dismissible alert-success" style="display:none;">
+              <button type="button" class="close" data-dismiss="alert">×</button>
+              <strong>Well done!</strong> You successfully answered a question</a>.
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
+<script src="js/firebase.js"></script>
+<script src="js/controller.js"></script>
+
+<!-- Twitter Bootstrap -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Material Design for Bootstrap -->
+<script src="dist/js/material.js"></script>
+<script src="dist/js/ripples.min.js"></script>
+<script>
+  $.material.init();
+
+  $('.bs-component [data-toggle="popover"]').popover();
+  $('.bs-component [data-toggle="tooltip"]').tooltip();
+
+  $('[data-toggle="popover"]').popover();
+  $('[data-toggle="tooltip"]').tooltip();
+
+  $(".bs-component").hover(function () {
+    $(this).append($button);
+    $button.show();
+  }, function () {
+    $button.hide();
+  });
+
+</script>
+
+
+<!-- Sliders -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/noUiSlider/6.2.0/jquery.nouislider.min.js"></script>
+<script>
+  $(function () {
+    $.material.init();
+    // $(".shor").noUiSlider({
+    //   start: 40,
+    //   connect: "lower",
+    //   range: {
+    //     min: 0,
+    //     max: 100
+    //   }
+    // });
+
+    // $(".svert").noUiSlider({
+    //   orientation: "vertical",
+    //   start: 40,
+    //   connect: "lower",
+    //   range: {
+    //     min: 0,
+    //     max: 100
+    //   }
+    // });
+  });
+</script>
+
+<!-- Dropdown.js -->
+<script src="https://cdn.rawgit.com/FezVrasta/dropdown.js/master/jquery.dropdown.js"></script>
+<script>
+  $("#dropdown-menu select").dropdown();
+</script>
+
+</body>
+</html>
