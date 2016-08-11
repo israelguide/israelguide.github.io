@@ -65,7 +65,7 @@
           </a>
         </li>
 
-        <li data-container="body" data-toggle="popover" data-placement="bottom" data-content="Your current rate is 4.75 / 5"><a href="javascript:void(0)">Hello, Sergey</a></li>
+        <li data-container="body" data-toggle="popover" data-placement="bottom" data-content="Your current rate is 4.75 / 5"><a id="buddyName" href="javascript:void(0)">Hello, __buddy_name__</a></li>
       </ul>
 
     </div>
@@ -125,7 +125,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary">Answer</button>
         </div>
 
       </form>
@@ -135,11 +135,15 @@
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/3.2.1/firebase.js"></script>
-<script src="js/firebase.js"></script>
-<script src="js/controller.js"></script>
 
 <!-- Twitter Bootstrap -->
 <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- JavaScript Cookie -->
+<script type="text/javascript" src="dist/js/js.cookie.js"></script>
+
+<script src="js/firebase.js"></script>
+<script src="js/controller.js"></script>
 
 <!-- Material Design for Bootstrap -->
 <script src="dist/js/material.js"></script>
@@ -159,7 +163,6 @@
   }, function () {
     $button.hide();
   });
-
 </script>
 
 

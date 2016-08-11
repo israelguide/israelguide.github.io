@@ -76,12 +76,17 @@ function processPage( page ) {
 
 }
 
+
+// var buddy_name = Cookies.get('buddy_name');
+var buddy_name = null;
+if( buddy_name == undefined || buddy_name == null ) {
+	buddy_name = prompt('Enter your name', '');
+	Cookies.set('buddy_name', buddy_name, { expires: 7 });
+}
+$("#buddyName").text($("#buddyName").text().replace(/__buddy_name__/g, buddy_name));
+
 var page = checkPage();
 processPage( page );
-
-// db.ref('/').on('child_added', function(data) {
-// 	alert('smth new appeared');
-// });
 
 db.ref('/').on('value', function(data) {
 	processPage( page );
@@ -158,7 +163,7 @@ $('#replyModal').on('submit', function() {
 	db.ref('/' + key + '/answers/').push({
 		mDate: d.getTime(),
 		answer: answerText,
-		BuddyName: 'Sergey',
+		BuddyName: buddy_name,
 		vote: 0
 	});
 
