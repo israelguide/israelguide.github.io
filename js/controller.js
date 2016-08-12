@@ -1,11 +1,17 @@
 function formatDateFromString( date ) {
 	if( date ) {
 		dObj = new Date( date );
-		return dObj.getUTCHours() + ':' + dObj.getUTCMinutes() + ':' + dObj.getUTCSeconds()
-			+ ' ' + dObj.getMonth() + '/' + dObj.getDate() + '/' + dObj.getFullYear();
+		return addLeadingZero( dObj.getHours() ) + ':' + addLeadingZero( dObj.getMinutes() ) + ':' 
+		+ addLeadingZero( dObj.getSeconds() ) + ' ' + addLeadingZero( dObj.getMonth() ) 
+		+ '/' + addLeadingZero( dObj.getDate() ) + '/' + dObj.getFullYear();
 	} else {
 		return '';
 	}
+}
+
+function addLeadingZero( str ) {
+	str = str + ""
+	return ( str.length == 1 ) ? "0" + str : str
 }
 
 function cutText(text, maxLength) {
@@ -18,6 +24,24 @@ function cutText(text, maxLength) {
 
 function checkPage( id = null ) {
   	return (id == null) ? 'retreive-new' : id;
+}
+
+var a = [34, 203, 3, 746, 200, 984, 198, 764, 9];
+ 
+function bubbleSort(a)
+{
+    var swapped;
+    do {
+        swapped = false;
+        for (var i=0; i < a.length-1; i++) {
+            if (a[i] < a[i+1]) {
+                var temp = a[i];
+                a[i] = a[i+1];
+                a[i+1] = temp;
+                swapped = true;
+            }
+        }
+    } while (swapped);
 }
 
 function processPage( page ) {
@@ -143,7 +167,7 @@ $('#viewModal').on('show.bs.modal', function (event) {
 			} else {
 				Cookies.set(key + '&&' + answerKey, true, { expires: 7 });
 			}
-			
+
 			db.ref('/' + key + '/answers/' + answerKey + '/').update({ 
 				vote: answerVote
 			});
